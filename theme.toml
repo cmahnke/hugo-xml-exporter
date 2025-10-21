@@ -1,10 +1,8 @@
-# theme.toml
-
 name = "Hugo XML Exporter"
 license = "MIT"
 licenselink = "https://opensource.org/licenses/MIT"
 description = "A Hugo theme designed to export an entire Hugo site's content, metadata, and resources into a single, structured XML file."
-homepage = "https://github.com/your-username/hugo-xml-exporter" # Replace with your actual repository
+homepage = "https://github.com/cmahnke/hugo-xml-exporter"
 tags = ["export", "xml", "data", "migration", "archive", "headless"]
 features = [
   "Exports all regular pages and sections",
@@ -14,7 +12,20 @@ features = [
   "Lists all page resources (images, documents) with metadata (e.g., image dimensions)",
   "Generates a single, well-formed XML file"
 ]
-min_version = "0.110.0" # Minimum Hugo version required for .Resources and other features
+min_version = "0.141.0"
 
-author = "Your Name" # Replace with your name
-author_homepage = "https://your-website.com" # Replace with your website
+author = "Christian Mahnke"
+author_homepage = "https://christianmahnke.de/"
+
+[mediaTypes]
+  [mediaTypes."image/jxl"]
+    suffixes = ["jxl"]
+  [mediaTypes."application/xml"]
+    suffixes = ["xml"]
+
+[outputFormats]
+  [outputFormats.xml-export]
+    mediaType = "application/xml"
+    baseName = "site-export"
+    isPlainText = true
+    notAlternative = true

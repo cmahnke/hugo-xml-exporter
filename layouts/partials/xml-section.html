@@ -1,0 +1,27 @@
+<section id="s-{{ .Permalink | md5 }}"{{ if not .IsTranslated }} isPrimary="true"{{ end }}>
+    <title>{{ .Title | transform.XMLEscape }}</title>
+    <permalink>{{ .Permalink }}</permalink>
+    <path>{{ .Path }}</path>
+    <taxonomies>
+    {{- if eq .Kind "section" -}}
+        {{- $page := . -}}
+        {{- range $taxonomy, $terms := site.Taxonomies -}}
+            <taxonomy name="{{ $taxonomy | transform.XMLEscape }}">
+            {{- range $page.GetTerms $taxonomy -}}
+                <term name="{{ .LinkTitle | transform.XMLEscape }}" permalink="{{ .Permalink }}"/>
+            {{- end -}}
+            </taxonomy>
+        {{- end -}}
+    {{- end -}}
+    </taxonomies>
+    <pages>
+    {{- /* Render regular pages in this section */ -}}
+    {{- range .RegularPages.ByDate.Reverse -}}
+        {{- partial "xml-page.html" . -}}
+    {{- end -}}
+    </pages>
+    {{- /* Recurse into sub-sections */ -}}
+    {{- range .Sections -}}
+        {{- partial "xml-section.html" . -}}
+    {{- end -}}
+</section>

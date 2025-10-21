@@ -1,0 +1,3 @@
+{{ $cdataStart := "<![CDATA[" -}}
+<content type="html">{{$cdataStart | safeHTML }}{{ .Content | safeHTML }}]]></content>
+<rawcontent type="markdown">{{$cdataStart | safeHTML }}{{ .RawContent | safeHTML }}]]></rawcontent>

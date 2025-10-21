@@ -1,0 +1,21 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" | safeHTML -}}
+<site>
+    <title>{{ site.Title | transform.XMLEscape }}</title>
+    <baseURL>{{ site.BaseURL }}</baseURL>
+    <buildDate>{{ now.Format "2006-01-02T15:04:05Z07:00" }}</buildDate>
+    <languages>
+    {{- range .Site.Home.AllTranslations -}}
+    <language code="{{ .Language.Lang }}">
+        <content>
+        {{- /* Render top-level pages */ -}}
+        {{- partial "xml-page.html" . -}}
+        {{- /* Render sections recursively */ -}}
+        {{- range .Site.Sections -}}
+            {{- partial "xml-section.html" . -}}
+        {{- end -}}
+        </content>
+        {{- partial "xml-taxonomy.html" . -}}
+    </language>
+    {{- end -}}
+    </languages>
+</site>

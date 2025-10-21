@@ -22,14 +22,18 @@ This is a specialized Hugo "theme" designed not for rendering a website, but for
 
     If you have an existing theme, you can add this as a component. First, add it as a Git submodule:
     ```bash
-    git submodule add https://github.com/your-username/hugo-xml-exporter.git themes/hugo-xml
+    git submodule add https://github.com/cmahnke/hugo-xml-exporter.git themes/hugo-xml-exporter
     ```
     Then, in your `hugo.toml` (or `config.toml`), add `hugo-xml` to your `theme` list:
     ```toml
     # hugo.toml
-    theme = ["your-main-theme", "hugo-xml"]
+    theme = ["your-main-theme", "hugo-xml-exporter"]
     ```
-    **Note**: For this exporter to work, you might need to temporarily make `hugo-xml` the *only* theme or ensure its `layouts` directory is prioritized. A simpler approach is to copy the `layouts` directory directly into your project's root `layouts` folder.
+    **Note**: For this exporter to work, you might need to temporarily make `hugo-xml` the *only* theme or ensure its `layouts` directory is prioritized. A simpler approach is to copy the `layouts` directory directly into your project's root `layouts` folder. **Or:**
+    Run Hugo with a curom theme:
+    ```bash
+    hugo -t hugo-xml-exporter
+    ```
 
 2.  **Direct Copy**:
 
@@ -40,19 +44,31 @@ This is a specialized Hugo "theme" designed not for rendering a website, but for
 To enable the XML export, you need to configure a custom output format in your `hugo.toml` (or `config.toml`):
 
 ```toml
-# hugo.toml
-
-# 1. Define a new custom output format called 'SITE_XML'
-[outputFormats.SITE_XML]
+# Define a new custom output format called 'SITE_XML'
+[outputFormats.xml-export]
   mediaType = "application/xml"
   baseName = "site-export"  # This will be the name of the output file (site-export.xml)
   isPlainText = true
   notAlternative = true # Ensures it doesn't get added to <link rel="alternate">
 
-# 2. Instruct the "home" page kind to generate ONLY this XML file.
-#    This stops Hugo from generating the usual index.html for the homepage.
+```
+
+Instruct the "home" page kind to generate the XML file. You might also set the to the only output: This stops Hugo from generating the usual index.html for the homepage.
+
+```toml
 [outputs]
-  home = ["SITE_XML"]
+  home = ["xml-export"]
+```
+
+**Or:**
+
+Add it to the output section in the front matter of your `home` section file (`content/_index.md`)
+
+```yaml
+outputs:
+  - html
+  - rss
+  - xml-export
 ```
 
 ## Usage

@@ -1,0 +1,12 @@
+{{- $type := printf "%T" . -}}
+{{- if or (eq $type "int") (eq $type "int64") -}}
+    {{- print "xs:integer" -}}
+{{- else if or (eq $type "float32") (eq $type "float64") -}}
+    {{- print "xs:decimal" -}}
+{{- else if eq $type "bool" -}}
+    {{- print "xs:boolean" -}}
+{{- else if eq $type "time.Time" -}}
+    {{- print "xs:dateTime" -}}
+{{- else -}}
+    {{- print "xs:string" -}}
+{{- end -}}

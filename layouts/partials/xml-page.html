@@ -1,0 +1,46 @@
+<page id="p-{{ .Permalink | md5 }}"{{ if not .IsTranslated }} isPrimary="true"{{ end }}>
+    <title>{{ .Title | transform.XMLEscape }}</title>
+    <permalink>{{ .Permalink }}</permalink>
+    <path>{{ .Path }}</path>
+    <date>{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</date>
+    <lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</lastmod>
+    {{- partial "xml-content.html" . -}}
+    <frontmatter>
+    {{- partial "xml-params.html" .Params -}}
+    </frontmatter>
+    <taxonomies>
+    {{- if eq .Kind "page" -}}
+      {{- $page := . -}}
+      {{- range $taxonomy, $terms := site.Taxonomies -}}
+          <taxonomy name="{{ $taxonomy | transform.XMLEscape }}">
+          {{- range $page.GetTerms $taxonomy -}}
+              <term name="{{ .LinkTitle | transform.XMLEscape }}" permalink="{{ .Permalink }}"/>
+          {{- end -}}
+          </taxonomy>
+      {{- end -}}
+    {{- end -}}
+    </taxonomies>
+    <resources>
+    {{- range .Resources.Match "*" -}}
+        <resource>
+            <name>{{ .Name | transform.XMLEscape }}</name>
+            <permalink>{{ .Permalink }}</permalink>
+            <type>{{ .ResourceType | transform.XMLEscape }}</type>
+            {{- if eq .ResourceType "image" -}}
+              {{/*
+              {{- with try . -}}
+                {{- with .Err -}}
+                  {{- warnf "%s" . -}}
+                {{- else -}}
+                  <width>{{ .Width }}</width>
+                  <height>{{ .Height }}</height>
+                {{- end -}}
+              {{- end -}}
+              */}}
+              <width>{{ .Width }}</width>
+              <height>{{ .Height }}</height>
+            {{- end -}}
+        </resource>
+    {{- end -}}
+    </resources>
+</page>

@@ -1,0 +1,19 @@
+{{- range $key, $value := . -}}
+    {{- if reflect.IsMap $value -}}
+        <param key="{{ $key | transform.XMLEscape }}" type="map">
+            {{- partial "xml-params.html" $value -}}
+        </param>
+    {{- else if reflect.IsSlice $value -}}
+        <param key="{{ $key | transform.XMLEscape }}" type="slice">
+            {{- range $value -}}
+                {{- if reflect.IsMap . -}}
+                    <item>{{- partial "xml-params.html" . -}}</item>
+                {{- else -}}
+                    <value type="{{ partial `get-xsd-type.html` . }}">{{ . | transform.XMLEscape }}</value>
+                {{- end -}}
+            {{- end -}}
+        </param>
+    {{- else -}}
+        <param key="{{ $key | transform.XMLEscape }}" type="{{ partial `get-xsd-type.html` $value }}">{{ $value | transform.XMLEscape }}</param>
+    {{- end -}}
+{{- end -}}

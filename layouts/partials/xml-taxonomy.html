@@ -1,0 +1,15 @@
+<taxonomies>
+    {{- range $taxonomy, $terms := .Site.Taxonomies -}}
+        <taxonomy name="{{ $taxonomy | transform.XMLEscape }}">
+        {{- range $terms.ByCount -}}
+            <term name="{{ .Page.LinkTitle  | transform.XMLEscape }}">
+                <permalink>{{ .Page.Permalink }}</permalink>
+                <count>{{ .Count }}</count>
+                {{- range .Pages.ByTitle -}}
+                    <page idref="p-{{ .Permalink | md5 }}" url="{{ .Permalink }}"/>
+                {{- end -}}
+            </term>
+        {{- end -}}
+        </taxonomy>
+    {{- end -}}
+</taxonomies>
