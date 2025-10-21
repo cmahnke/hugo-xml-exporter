@@ -1,0 +1,35 @@
+<page>
+    <title>{{ .Title | xmlEscape }}</title>
+    <permalink>{{ .Permalink }}</permalink>
+    <path>{{ .Path }}</path>
+    <date>{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</date>
+    <lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</lastmod>
+    <content type="html"><![CDATA[{{ .Content | safeHTML }}]]></content>
+    <summary type="html"><![CDATA[{{ .Summary | safeHTML }}]]></summary>
+    <frontmatter>
+    {{- range $key, $value := .Params -}}
+        {{- if reflect.IsSlice $value -}}
+        <param key="{{ $key | xmlEscape }}">
+            {{- range $value -}}
+            <value>{{ . | xmlEscape }}</value>
+            {{- end -}}
+        </param>
+        {{- else -}}
+        <param key="{{ $key | xmlEscape }}">{{ $value | xmlEscape }}</param>
+        {{- end -}}
+    {{- end -}}
+    </frontmatter>
+    <resources>
+    {{- range .Resources.Match "*" -}}
+        <resource>
+            <name>{{ .Name | xmlEscape }}</name>
+            <permalink>{{ .Permalink }}</permalink>
+            <type>{{ .ResourceType | xmlEscape }}</type>
+            {{- if eq .ResourceType "image" -}}
+            <width>{{ .Width }}</width>
+            <height>{{ .Height }}</height>
+            {{- end -}}
+        </resource>
+    {{- end -}}
+    </resources>
+</page>

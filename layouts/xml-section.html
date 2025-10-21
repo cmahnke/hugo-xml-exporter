@@ -1,0 +1,15 @@
+<section>
+    <title>{{ .Title | xmlEscape }}</title>
+    <permalink>{{ .Permalink }}</permalink>
+    <path>{{ .Path }}</path>
+    <pages>
+    {{- /* Render regular pages in this section */ -}}
+    {{- range .RegularPages.ByDate.Reverse -}}
+        {{- partial "xml-page.html" . -}}
+    {{- end -}}
+    </pages>
+    {{- /* Recurse into sub-sections */ -}}
+    {{- range .Sections -}}
+        {{- partial "xml-section.html" . -}}
+    {{- end -}}
+</section>

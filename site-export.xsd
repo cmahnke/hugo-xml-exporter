@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Root Element -->
+  <xs:element name="site" type="siteType"/>
+
+  <!-- Type Definitions -->
+  <xs:complexType name="siteType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="baseURL" type="xs:anyURI"/>
+      <xs:element name="buildDate" type="xs:dateTime"/>
+      <xs:element name="content">
+        <xs:complexType>
+          <xs:sequence>
+            <!-- Top-level pages (if any) -->
+            <xs:element name="page" type="pageType" minOccurs="0" maxOccurs="unbounded"/>
+            <!-- Top-level sections -->
+            <xs:element name="section" type="sectionType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sectionType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="permalink" type="xs:anyURI"/>
+      <xs:element name="path" type="xs:string"/>
+      <xs:element name="pages">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="page" type="pageType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <!-- Recursive definition for sub-sections -->
+      <xs:element name="section" type="sectionType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="pageType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="permalink" type="xs:anyURI"/>
+      <xs:element name="path" type="xs:string"/>
+      <xs:element name="date" type="xs:dateTime"/>
+      <xs:element name="lastmod" type="xs:dateTime"/>
+      <xs:element name="content" type="cdataBlock"/>
+      <xs:element name="summary" type="cdataBlock"/>
+      <xs:element name="frontmatter">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="resources">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="resource" type="resourceType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="cdataBlock" mixed="true">
+    <xs:attribute name="type" type="xs:string" use="required" fixed="html"/>
+  </xs:complexType>
+
+  <xs:complexType name="paramType">
+    <xs:choice minOccurs="0">
+      <xs:element name="value" type="xs:string" maxOccurs="unbounded"/>
+      <xs:simpleContent>
+        <xs:extension base="xs:string"/>
+      </xs:simpleContent>
+    </xs:choice>
+    <xs:attribute name="key" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="resourceType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="permalink" type="xs:anyURI"/>
+      <xs:element name="type" type="xs:string"/>
+      <xs:sequence minOccurs="0">
+        <xs:element name="width" type="xs:integer"/>
+        <xs:element name="height" type="xs:integer"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
