@@ -1,0 +1,24 @@
+<resources>
+{{- range .Resources.Match "*" -}}
+    <resource>
+        <name>{{ .Name | transform.XMLEscape }}</name>
+        <permalink>{{ .Permalink }}</permalink>
+        <type>{{ .ResourceType | transform.XMLEscape }}</type>
+        {{- if eq .ResourceType "image" -}}
+            {{- $res := . -}}
+            {{ with try (.Width) }}
+                {{ with .Err }}
+                    {{ warnf "Cant't get image dimensions: %s" . }}
+                {{ else }}
+                    <width>{{ . }}</width>
+                    <height>{{ $res.Height }}</height>
+                {{ end }}
+            {{ end }}
+           
+        {{- end -}}
+        <params>
+        {{- partial "xml-params.html" .Params -}}
+        </params>
+    </resource>
+{{- end -}}
+</resources>

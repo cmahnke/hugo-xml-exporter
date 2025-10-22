@@ -14,6 +14,7 @@
         {{- end -}}
     {{- end -}}
     </taxonomies>
+    {{- partial "xml-resources.html" . -}}
     <pages>
     {{- /* Render regular pages in this section */ -}}
     {{- range .RegularPages.ByDate.Reverse -}}
