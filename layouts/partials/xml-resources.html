@@ -1,20 +1,23 @@
+{{- $page := . -}}
 <resources>
 {{- range .Resources.Match "*" -}}
     <resource>
         <name>{{ .Name | transform.XMLEscape }}</name>
         <permalink>{{ .Permalink }}</permalink>
         <type>{{ .ResourceType | transform.XMLEscape }}</type>
+        <subtype>{{ .MediaType.SubType | transform.XMLEscape }}</subtype>
         {{- if eq .ResourceType "image" -}}
-            {{- $res := . -}}
+          {{- $res := . -}}
+          {{- if ne .MediaType.SubType "svg" -}}
             {{ with try (.Width) }}
                 {{ with .Err }}
-                    {{ warnf "Cant't get image dimensions: %s" . }}
+                    {{ warnf "Cant't get image dimensions for %s: %s" $res.RelPermalink . }}
                 {{ else }}
                     <width>{{ . }}</width>
                     <height>{{ $res.Height }}</height>
                 {{ end }}
             {{ end }}
-           
+          {{- end -}}
         {{- end -}}
         <params>
         {{- partial "xml-params.html" .Params -}}
