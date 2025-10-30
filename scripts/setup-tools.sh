@@ -59,6 +59,7 @@ fi
 if [ ! -f "${SAXON_JAR}" ]; then
     echo "Downloading Saxon-HE ${SAXON_VERSION}..."
     curl -L -o "${SAXON_JAR}" "${SAXON_URL}"
+    cp "$(pwd)/${SAXON_JAR}" "$(pwd)/fop-${FOP_VERSION}/fop/lib/"
     echo "Saxon-HE installed in $(pwd)/${SAXON_JAR}"
 else
     echo "Saxon-HE ${SAXON_VERSION} already found. Skipping download."
@@ -78,7 +79,7 @@ echo "Creating 'fop-render' wrapper script..."
 cat > fop-render <<EOF
 #!/bin/sh
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
-sh "\$DIR/fop-${FOP_VERSION}/fop" "\$@"
+FOP_OPTS="-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl \$FOP_OPTS" "\$DIR/fop-${FOP_VERSION}/fop/fop" "\$@"
 EOF
 chmod +x fop-render
 
