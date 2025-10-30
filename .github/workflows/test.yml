@@ -18,6 +18,10 @@ jobs:
         with:
           submodules: true 
 
+      - name: Install required dependencies
+        run: |
+          sudo apt-get install -y curl default-jre
+
       - name: Test FOP install
         run: |
           ./scripts/setup-tools.sh
