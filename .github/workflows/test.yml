@@ -1,4 +1,4 @@
-name: Check schema
+name: Check tool install
 
 on:
   push:
@@ -10,21 +10,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  PYTHON_VERSION: '3.12'
-
 jobs:
-  deploy:
+  run_install:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
         with:
           submodules: true 
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Test FOP install
         run: |
