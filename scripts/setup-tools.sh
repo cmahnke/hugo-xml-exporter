@@ -87,9 +87,10 @@ chmod +x fop-render
 echo "Creating 'fop-font-list' wrapper script..."
 cat > fop-font-list <<EOF
 #!/bin/sh
+FOP_VERSION=${FOP_VERSION}
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
 FOP_HOME="\$DIR/fop-${FOP_VERSION}/fop"
-CP="\$FOP_HOME/build/fop.jar"
+CP="\$FOP_HOME/build/fop-core-\${FOP_VERSION}.jar:\$FOP_HOME/build/fop-util-\${FOP_VERSION}.jar:\$FOP_HOME/build/fop-events-\${FOP_VERSION}.jar"
 for i in \$FOP_HOME/lib/*.jar; do CP="\$CP:\$i"; done
 java -cp "\$CP" org.apache.fop.tools.fontlist.FontListMain "\$@"
 EOF
