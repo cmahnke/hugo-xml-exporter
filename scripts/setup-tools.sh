@@ -83,16 +83,26 @@ FOP_OPTS="-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFacto
 EOF
 chmod +x fop-render
 
+# --- Create FOP FontList Wrapper Script ---
+echo "Creating 'fop-font-list' wrapper script..."
+cat > fop-font-list <<EOF
+#!/bin/sh
+DIR=\$(cd "\$(dirname "\$0")" && pwd)
+FOP_HOME="\$DIR/fop-${FOP_VERSION}/fop"
+CP="\$FOP_HOME/build/fop.jar"
+for i in \$FOP_HOME/lib/*.jar; do CP="\$CP:\$i"; done
+java -cp "\$CP" org.apache.fop.tools.fontlist.FontListMain "\$@"
+EOF
+chmod +x fop-font-list
+
 echo ""
 echo "--- Setup Complete ---"
 echo "You can now use the wrapper scripts in the '${INSTALL_DIR}' directory."
 echo ""
 echo "Example Usage:"
-echo "1. Transform XML to FO:"
-echo "   ${INSTALL_DIR}/saxon-transform -s:public/site-export.xml -xsl:to-fo.xsl -o:public/site-export.fo"
-echo ""
-echo "2. Render FO to PDF:"
-echo "   ${INSTALL_DIR}/fop-render -fo public/site-export.fo -pdf public/site-export.pdf"
+echo "  ${INSTALL_DIR}/saxon-transform -s:public/site-export.xml -xsl:to-fo.xsl -o:public/site-export.fo"
+echo "  ${INSTALL_DIR}/fop-render -fo public/site-export.fo -pdf public/site-export.pdf"
+echo "  ${INSTALL_DIR}/fop-font-list -c fop-config.xml"
 echo ""
 
 cd ..

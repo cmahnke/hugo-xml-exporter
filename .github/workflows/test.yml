@@ -25,3 +25,11 @@ jobs:
       - name: Test FOP install
         run: |
           ./scripts/setup-tools.sh
+
+      - name: Run FOP wrapper
+        run: |
+          ./tools/fop-render
+
+      - name: Run FOP font info
+        run: |
+          ./tools/fop-font-list
