@@ -20,12 +20,15 @@ set -e # Exit immediately if a command exits with a non-zero status.
 # --- Configuration ---
 FOP_VERSION="2.9"
 SAXON_VERSION="12.4"
+XML_RESOLVER_VERSION="5.2.2"
 
 FOP_URL="https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-${FOP_VERSION}-bin.tar.gz"
 SAXON_URL="https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/${SAXON_VERSION}/Saxon-HE-${SAXON_VERSION}.jar"
+XML_RESOLVER_URL="https://repo1.maven.org/maven2/org/xmlresolver/xmlresolver/${XML_RESOLVER_VERSION}/xmlresolver-${XML_RESOLVER_VERSION}.jar"
 
 FOP_ARCHIVE="fop-${FOP_VERSION}-bin.tar.gz"
 SAXON_JAR="Saxon-HE-${SAXON_VERSION}.jar"
+XML_RESOLVER_JAR="xmlresolver-${XML_RESOLVER_VERSION}.jar"
 
 # --- Installation Directory ---
 INSTALL_DIR=${1:-./tools}
@@ -45,7 +48,7 @@ cd "${INSTALL_DIR}"
 # --- Download and Extract Apache FOP ---
 if [ ! -d "fop-${FOP_VERSION}" ]; then
     echo "Downloading Apache FOP ${FOP_VERSION}..."
-    curl -L -o "${FOP_ARCHIVE}" "${FOP_URL}"
+    curl --fail-with-body -L -o "${FOP_ARCHIVE}" "${FOP_URL}"
 
     echo "Extracting Apache FOP..."
     tar -xzf "${FOP_ARCHIVE}"
@@ -58,12 +61,23 @@ fi
 # --- Download Saxon-HE ---
 if [ ! -f "${SAXON_JAR}" ]; then
     echo "Downloading Saxon-HE ${SAXON_VERSION}..."
-    curl -L -o "${SAXON_JAR}" "${SAXON_URL}"
+    curl --fail-with-body -L -o "${SAXON_JAR}" "${SAXON_URL}"
     cp "$(pwd)/${SAXON_JAR}" "$(pwd)/fop-${FOP_VERSION}/fop/lib/"
     echo "Saxon-HE installed in $(pwd)/${SAXON_JAR}"
 else
     echo "Saxon-HE ${SAXON_VERSION} already found. Skipping download."
 fi
+
+# --- Download XML Resolver ---
+if [ ! -f "${XML_RESOLVER_JAR}" ]; then
+    echo "Downloading XML Resolver ${XML_RESOLVER_VERSION}..."
+    curl --fail-with-body -L -o "${XML_RESOLVER_JAR}" "${XML_RESOLVER_URL}"
+    cp "$(pwd)/${XML_RESOLVER_JAR}" "$(pwd)/fop-${FOP_VERSION}/fop/lib/"
+    echo "XML Resolver installed in $(pwd)/${XML_RESOLVER_JAR}"
+else
+    echo "XML Resolver ${XML_RESOLVER_VERSION} already found. Skipping download."
+fi
+
 
 # --- Create Saxon Wrapper Script ---
 echo "Creating 'saxon-transform' wrapper script..."
