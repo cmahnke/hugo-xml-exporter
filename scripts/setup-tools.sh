@@ -84,7 +84,7 @@ echo "Creating 'saxon-transform' wrapper script..."
 cat > saxon-transform <<EOF
 #!/bin/sh
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
-java -jar "\$DIR/${SAXON_JAR}" "\$@"
+java -cp "\$DIR/${XML_RESOLVER_JAR}:\$DIR/${SAXON_JAR}" net.sf.saxon.Transform "\$@"
 EOF
 chmod +x saxon-transform
 
@@ -105,7 +105,12 @@ FOP_VERSION=${FOP_VERSION}
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
 FOP_HOME="\$DIR/fop-${FOP_VERSION}/fop"
 CP="\$FOP_HOME/build/fop-core-\${FOP_VERSION}.jar:\$FOP_HOME/build/fop-util-\${FOP_VERSION}.jar:\$FOP_HOME/build/fop-events-\${FOP_VERSION}.jar"
-for i in \$FOP_HOME/lib/*.jar; do CP="\$CP:\$i"; done
+for i in \$FOP_HOME/lib/*.jar;
+do
+    if [[ \$i != *"Saxon"* ]]; then
+        CP="\$CP:\$i"
+    fi
+done
 java -cp "\$CP" org.apache.fop.tools.fontlist.FontListMain "\$@"
 EOF
 chmod +x fop-font-list

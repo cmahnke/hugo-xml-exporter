@@ -30,6 +30,14 @@ jobs:
         run: |
           ./tools/fop-render
 
-      - name: Run FOP font info
+      - name: Run Saxon wrapper
+        run: |
+          ./tools/saxon-transform  
+
+      - name: Run FOP internal font info
         run: |
           ./tools/fop-font-list
+
+      - name: Run FOP internal font info
+        run: |
+          ./tools/fop-font-list -c conf/fonts.xconf  
