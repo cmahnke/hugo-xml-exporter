@@ -82,7 +82,7 @@ fi
 # --- Create Saxon Wrapper Script ---
 echo "Creating 'saxon-transform' wrapper script..."
 cat > saxon-transform <<EOF
-#!/bin/sh
+#!/usr/bin/env bash
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
 java -cp "\$DIR/${XML_RESOLVER_JAR}:\$DIR/${SAXON_JAR}" net.sf.saxon.Transform "\$@"
 EOF
@@ -91,7 +91,7 @@ chmod +x saxon-transform
 # --- Create FOP Wrapper Script ---
 echo "Creating 'fop-render' wrapper script..."
 cat > fop-render <<EOF
-#!/bin/sh
+#!/usr/bin/env bash
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
 FOP_OPTS="-Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl \$FOP_OPTS" "\$DIR/fop-${FOP_VERSION}/fop/fop" "\$@"
 EOF
@@ -100,7 +100,7 @@ chmod +x fop-render
 # --- Create FOP FontList Wrapper Script ---
 echo "Creating 'fop-font-list' wrapper script..."
 cat > fop-font-list <<EOF
-#!/bin/sh
+#!/usr/bin/env bash
 FOP_VERSION=${FOP_VERSION}
 DIR=\$(cd "\$(dirname "\$0")" && pwd)
 FOP_HOME="\$DIR/fop-${FOP_VERSION}/fop"
