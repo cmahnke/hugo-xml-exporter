@@ -48,4 +48,15 @@ jobs:
 
       - name: Run FOP internal font info
         run: |
-          ./tools/fop-font-list -c conf/fonts.xconf 
+          ./tools/fop-font-list -c conf/fonts.xconf
+
+      - name: Generate font report
+        run: |
+          ./tools/fop-font-list -c conf/fonts.xconf runner-fonts.pdf
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: font-report
+          path: runner-fonts.pdf
+          if-no-files-found: error
+          overwrite: true
