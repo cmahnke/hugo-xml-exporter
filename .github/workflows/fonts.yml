@@ -1,0 +1,51 @@
+name: Check fonts install
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run_install:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+
+      - name: Install required dependencies
+        run: |
+          sudo apt-get install -y curl default-jre
+
+      - uses: actions/checkout@v5
+        with:
+          repository: 'https://github.com/cmahnke/projektemacher-base.git'
+          path: 'projektemacher-base'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6.0.0
+        with:
+          check-latest: true
+          node-version-file: '.nvmrc'
+
+      - name: Configure npm
+        run: npm config set legacy-peer-deps true
+
+      - name: Install fonts
+        working-directory: ./projektemacher-base
+        run: |
+          ./scripts/fonts.sh
+          ./scripts/github/setup-system-fonts.sh
+
+      - name: Install tools
+        run: |
+          ./scripts/setup-tools.sh
+
+      - name: Run FOP internal font info
+        run: |
+          ./tools/fop-font-list -c conf/fonts.xconf 

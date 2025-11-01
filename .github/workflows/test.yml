@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Saxon wrapper
         run: |
-          ./tools/saxon-transform  
+          ./tools/saxon-transform -?
 
       - name: Run FOP internal font info
         run: |
