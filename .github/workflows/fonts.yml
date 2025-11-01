@@ -40,7 +40,7 @@ jobs:
         working-directory: ./projektemacher-base
         run: |
           ./scripts/fonts.sh
-          ./scripts/github/setup-system-fonts.sh static/fonts/
+          ./scripts/github/setup-system-fonts.sh .
 
       - name: Install tools
         run: |
